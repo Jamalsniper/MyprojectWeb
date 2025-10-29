@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة حفلات - نموذج الحجز</title>
+  <script>
+    (function(){
+      try{
+        var allThemes=['theme-light','theme-dark','theme-blue','theme-green'];
+        var saved=localStorage.getItem('selectedTheme')||'theme-light';
+        var root=document.documentElement; allThemes.forEach(function(t){root.classList.remove(t)}); root.classList.add(saved);
+      }catch(e){}
+    })();
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/booking.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="home.html" class="logo">
+          <i class="fas fa-glass-cheers"></i>
+          منصة حفلات
+        </a>
+        <nav>
+          <ul>
+            <li><a href="home.html">الرئيسية</a></li>
+            <li><a href="halls.html">القاعات</a></li>
+            <li><a href="teams.html">الفرق</a></li>
+            <li><a href="about.html">من نحن</a></li>
+            <li><a href="contact.html">اتصل بنا</a></li>
+          </ul>
+        </nav>
+        <div class="theme-switcher">
+          <div class="theme-circle theme-light-circle active" data-theme="theme-light"></div>
+          <div class="theme-circle theme-dark-circle" data-theme="theme-dark"></div>
+          <div class="theme-circle theme-blue-circle" data-theme="theme-blue"></div>
+          <div class="theme-circle theme-green-circle" data-theme="theme-green"></div>
+        </div>
+        <div class="auth-buttons">
+          <button type="button" class="btn btn-outline" onclick="window.location.href='index.html'">تسجيل الدخول</button>
+          <button type="button" class="btn btn-primary" onclick="window.location.href='index.html?signup=1'">إنشاء حساب</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>نموذج الحجز</h1>
+        <p>اختر القاعة وأكمل بياناتك ثم حدد طريقة الدفع المناسبة.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2>نموذج الحجز</h2>
+        <p>املأ البيانات التالية لإرسال طلب الحجز.</p>
+      </div>
+
+      <form id="bookingForm" class="form-card" novalidate>
+        <div id="selectedHall" class="selected-hall" style="display:none;">
+          <img id="selHallImg" alt="قاعة مختارة" loading="lazy">
+          <div class="sel-info">
+            <h3 id="selHallName"></h3>
+            <div class="sel-meta">
+              <span id="selHallLocation"></span>
+              <span id="selHallCapacity"></span>
+            </div>
+            <div class="sel-price" id="selHallPrice"></div>
+          </div>
+          <button type="button" id="clearSelectedHall" class="btn btn-outline">تغيير القاعة</button>
+        </div>
+        <div id="selectedTeam" class="selected-hall" style="display:none;">
+          <img id="selTeamImg" alt="فرقة مختارة" loading="lazy">
+          <div class="sel-info">
+            <h3 id="selTeamName"></h3>
+            <div class="sel-meta">
+              <span id="selTeamType"></span>
+              <span id="selTeamSize"></span>
+            </div>
+            <div class="sel-price" id="selTeamPrice"></div>
+          </div>
+          <button type="button" id="clearSelectedTeam" class="btn btn-outline">تغيير الفرقة</button>
+        </div>
+        <div class="form-actions" style="gap:8px;justify-content:flex-start;">
+          <a href="halls.html" class="btn btn-outline">اختيار قاعة</a>
+          <a href="teams.html" class="btn btn-outline">اختيار فرقة</a>
+        </div>
+        <div class="form-grid-2">
+          <div>
+            <label for="bname">الاسم الكامل</label>
+            <input id="bname" type="text" placeholder="اسمك">
+          </div>
+          <div>
+            <label for="bphone">رقم الجوال</label>
+            <input id="bphone" type="tel" placeholder="05xxxxxxxx">
+          </div>
+          <div>
+            <label for="bdate">تاريخ المناسبة</label>
+            <input id="bdate" type="date">
+          </div>
+          <div>
+            <label for="bguests">عدد الضيوف</label>
+            <input id="bguests" type="number" min="1" placeholder="مثال: 150">
+          </div>
+          <div>
+            <label for="bbudget">الميزانية التقريبية (ر.س)</label>
+            <input id="bbudget" type="number" min="0" placeholder="مثال: 5000">
+          </div>
+          <div>
+            <label for="btype">نوع الحجز</label>
+            <select id="btype">
+              <option value="">اختر نوع الحجز</option>
+              <option value="hall">قاعة</option>
+              <option value="team">فرقة</option>
+              <option value="both">قاعة + فرقة</option>
+            </select>
+          </div>
+          <div style="grid-column:1 / -1;">
+            <label for="bmessage">تفاصيل إضافية</label>
+            <textarea id="bmessage" rows="5" placeholder="اكتب أي تفاصيل مهمة مثل الموقع المفضل أو الملاحظات"></textarea>
+          </div>
+        </div>
+
+        <div class="payment-section">
+          <h3>طريقة الدفع</h3>
+          <div class="payment-methods" role="radiogroup" aria-label="طرق الدفع">
+            <label class="payment-option">
+              <input type="radio" name="pay" value="card" checked>
+              <span class="icon"><i class="fas fa-credit-card"></i></span>
+              <span>بطاقة بنكية</span>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="pay" value="mada">
+              <span class="icon"><i class="fas fa-money-bill-wave"></i></span>
+              <span>مدى</span>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="pay" value="bank">
+              <span class="icon"><i class="fas fa-building-columns"></i></span>
+              <span>تحويل بنكي</span>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="pay" value="cash">
+              <span class="icon"><i class="fas fa-wallet"></i></span>
+              <span>دفع عند الحضور</span>
+            </label>
+          </div>
+
+          <div id="cardFields" class="payment-fields">
+            <div class="form-grid-2">
+              <div>
+                <label for="cardName">الاسم على البطاقة</label>
+                <input id="cardName" type="text" placeholder="كما يظهر على البطاقة">
+              </div>
+              <div>
+                <label for="cardNumber">رقم البطاقة</label>
+                <input id="cardNumber" type="text" inputmode="numeric" maxlength="19" placeholder="#### #### #### ####">
+              </div>
+              <div>
+                <label for="cardExp">تاريخ الانتهاء</label>
+                <input id="cardExp" type="text" inputmode="numeric" maxlength="5" placeholder="MM/YY">
+              </div>
+              <div>
+                <label for="cardCvv">CVV</label>
+                <input id="cardCvv" type="password" inputmode="numeric" maxlength="4" placeholder="***">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="bookingError" class="alert alert--error" role="alert" aria-live="polite"></div>
+        <div id="bookingSuccess" class="alert alert--success" role="status" aria-live="polite"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">إرسال الطلب</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script src="js/home.js"></script>
+  <script>
+    // تعبئة القاعة المختارة إن وجدت
+    (function(){
+      const hallBox=document.getElementById('selectedHall');
+      const teamBox=document.getElementById('selectedTeam');
+      const typeSel=document.getElementById('btype');
+      let hasHall=false, hasTeam=false;
+      try{
+        const rawH=localStorage.getItem('selectedHall');
+        if(rawH){
+          const hall=JSON.parse(rawH);
+          document.getElementById('selHallImg').src=hall.image;
+          document.getElementById('selHallImg').alt=hall.name;
+          document.getElementById('selHallName').textContent=hall.name;
+          document.getElementById('selHallLocation').textContent=hall.location||'';
+          document.getElementById('selHallCapacity').textContent=hall.capacity||'';
+          document.getElementById('selHallPrice').textContent=hall.price||'';
+          hallBox.style.display='grid';
+          hasHall=true;
+        }
+      }catch(e){}
+      try{
+        const rawT=localStorage.getItem('selectedTeam');
+        if(rawT){
+          const team=JSON.parse(rawT);
+          document.getElementById('selTeamImg').src=team.image;
+          document.getElementById('selTeamImg').alt=team.name;
+          document.getElementById('selTeamName').textContent=team.name;
+          document.getElementById('selTeamType').textContent=team.type||'';
+          document.getElementById('selTeamSize').textContent=team.size||'';
+          document.getElementById('selTeamPrice').textContent=team.price||'';
+          teamBox.style.display='grid';
+          hasTeam=true;
+        }
+      }catch(e){}
+
+      // لا يتم تعيين نوع الحجز تلقائياً؛ يختار المستخدم النوع أولاً
+
+      const clearHallBtn=document.getElementById('clearSelectedHall');
+      if(clearHallBtn){ clearHallBtn.addEventListener('click', function(){ localStorage.removeItem('selectedHall'); hallBox.style.display='none'; }); }
+      const clearTeamBtn=document.getElementById('clearSelectedTeam');
+      if(clearTeamBtn){ clearTeamBtn.addEventListener('click', function(){ localStorage.removeItem('selectedTeam'); teamBox.style.display='none'; }); }
+    })();
+
+    // تبديل حقول البطاقة حسب طريقة الدفع
+    (function(){
+      const radios=[...document.querySelectorAll('input[name="pay"]')];
+      const cardBox=document.getElementById('cardFields');
+      const update=()=>{ const v=(radios.find(r=>r.checked)||{}).value; cardBox.style.display= v==='card'||v==='mada' ? 'block':'none'; };
+      radios.forEach(r=>r.addEventListener('change', update));
+      update();
+    })();
+
+    function handleBookingTypeChange(type) {
+      if (type === 'hall' && !localStorage.getItem('selectedHall')) {
+        window.location.href = 'halls.html';
+      } else if (type === 'team' && !localStorage.getItem('selectedTeam')) {
+        window.location.href = 'teams.html';
+      } else if (type === 'both' && (!localStorage.getItem('selectedHall') || !localStorage.getItem('selectedTeam'))) {
+        if (!localStorage.getItem('selectedHall')) {
+          window.location.href = 'halls.html';
+        } else {
+          window.location.href = 'teams.html';
+        }
+      }
+    }
+
+    // ربط تغيير نوع الحجز
+    (function(){
+      const sel = document.getElementById('btype');
+      if (!sel) return;
+      sel.addEventListener('change', function(){ handleBookingTypeChange(this.value); });
+      // في حال كان النوع مضبوطاً مسبقاً (مثلاً رجع المستخدم للنموذج)، طبّق التحقق مباشرة
+      if (sel.value) { handleBookingTypeChange(sel.value); }
+    })();
+
+    document.getElementById('bookingForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('bname').value.trim();
+      const phone = document.getElementById('bphone').value.trim();
+      const date = document.getElementById('bdate').value.trim();
+      const guests = parseInt(document.getElementById('bguests').value, 10);
+      const budget = parseInt(document.getElementById('bbudget').value, 10);
+      const type = document.getElementById('btype').value;
+      const msg = document.getElementById('bmessage').value.trim();
+      const err = document.getElementById('bookingError');
+      const ok = document.getElementById('bookingSuccess');
+      err.style.display = 'none'; err.textContent = '';
+      ok.style.display = 'none'; ok.textContent = '';
+
+      const phoneRx = /^0?5\d{8}$/;
+      const today = new Date(); today.setHours(0,0,0,0);
+      const chosen = date ? new Date(date) : null;
+
+      if(!name || !phone || !date || !guests || !type){
+        err.textContent = 'يرجى تعبئة الحقول المطلوبة (الاسم، الجوال، التاريخ، الضيوف، نوع الحجز)';
+        err.style.display = 'block';
+        return;
+      }
+      if(!phoneRx.test(phone)){
+        err.textContent = 'صيغة رقم الجوال غير صحيحة. مثال: 05xxxxxxxx';
+        err.style.display = 'block';
+        return;
+      }
+      if(chosen && chosen < today){
+        err.textContent = 'يرجى اختيار تاريخ لاحق';
+        err.style.display = 'block';
+        return;
+      }
+      if(guests < 1){
+        err.textContent = 'عدد الضيوف يجب أن يكون 1 على الأقل';
+        err.style.display = 'block';
+        return;
+      }
+      if(budget && budget < 0){
+        err.textContent = 'الميزانية يجب أن تكون قيمة موجبة';
+        err.style.display = 'block';
+        return;
+      }
+
+      // التحقق من وجود القاعة/الفرقة حسب نوع الحجز
+      let hasHall=false, hasTeam=false;
+      try { hasHall = !!localStorage.getItem('selectedHall'); } catch(_) {}
+      try { hasTeam = !!localStorage.getItem('selectedTeam'); } catch(_) {}
+      if(type === 'hall' && !hasHall){
+        err.textContent = 'يرجى اختيار القاعة أولاً من صفحة القاعات';
+        err.style.display = 'block';
+        return;
+      }
+      if(type === 'team' && !hasTeam){
+        err.textContent = 'يرجى اختيار الفرقة أولاً من صفحة الفرق';
+        err.style.display = 'block';
+        return;
+      }
+      if(type === 'both' && (!hasHall || !hasTeam)){
+        err.textContent = 'يرجى اختيار القاعة والفرقة قبل الإرسال';
+        err.style.display = 'block';
+        return;
+      }
+
+      // تحقق بسيط لطريقة الدفع عند اختيار البطاقة
+      const pay = (document.querySelector('input[name="pay"]:checked')||{}).value;
+      if(pay==='card' || pay==='mada'){
+        const cn = document.getElementById('cardNumber').value.replace(/\s+/g,'');
+        const ce = document.getElementById('cardExp').value.trim();
+        const cv = document.getElementById('cardCvv').value.trim();
+        if(cn.length<13 || !/^\d+$/.test(cn)) { err.textContent='رقم البطاقة غير صحيح'; err.style.display='block'; return; }
+        if(!/^\d{2}\/\d{2}$/.test(ce)) { err.textContent='صيغة تاريخ الانتهاء غير صحيحة (MM/YY)'; err.style.display='block'; return; }
+        if(cv.length<3 || !/^\d{3,4}$/.test(cv)) { err.textContent='رمز الحماية غير صحيح'; err.style.display='block'; return; }
+      }
+
+      ok.textContent = 'تم إرسال طلب الحجز بنجاح';
+      ok.style.display = 'block';
+      this.reset();
+    });
+  </script>
+</body>
+</html>

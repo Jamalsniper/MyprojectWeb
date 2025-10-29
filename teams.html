@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة حفلات - الفرق</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/teams.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="theme-light">
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="home.html" class="logo">
+          <i class="fas fa-glass-cheers"></i>
+          منصة حفلات
+        </a>
+        <nav>
+          <ul>
+            <li><a href="home.html">الرئيسية</a></li>
+            <li><a href="halls.html">القاعات</a></li>
+            <li><a href="teams.html" class="active">الفرق</a></li>
+            <li><a href="about.html">من نحن</a></li>
+            <li><a href="contact.html">اتصل بنا</a></li>
+          </ul>
+        </nav>
+        <div class="theme-switcher">
+          <div class="theme-circle theme-light-circle active" data-theme="theme-light"></div>
+          <div class="theme-circle theme-dark-circle" data-theme="theme-dark"></div>
+          <div class="theme-circle theme-blue-circle" data-theme="theme-blue"></div>
+          <div class="theme-circle theme-green-circle" data-theme="theme-green"></div>
+        </div>
+        <div class="auth-buttons">
+          <button type="button" class="btn btn-outline" onclick="window.location.href='index.html'">تسجيل الدخول</button>
+          <button type="button" class="btn btn-primary" onclick="window.location.href='index.html?signup=1'">إنشاء حساب</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>الفرق الموسيقية</h1>
+        <p>صفحة قيد الإنشاء لعرض جميع الفرق الموسيقية والترفيهية.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2>جميع الفرق</h2>
+        <p>تعرف على الفرق المتاحة واحجز الأنسب لحفلتك</p>
+      </div>
+      <div class="cards-container" id="teamsContainer">
+        <!-- سيتم ملء هذا القسم تلقائياً من home.js عبر renderTeams(teamsData) -->
+      </div>
+    </div>
+  </section>
+
+  <script src="js/home.js"></script>
+</body>
+</html>

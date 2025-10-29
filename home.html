@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>منصة حفلات - الصفحة الرئيسية</title>
+    <script>
+      (function() {
+        try {
+          var allThemes = ['theme-light','theme-dark','theme-blue','theme-green'];
+          var saved = localStorage.getItem('selectedTheme') || 'theme-light';
+          var root = document.documentElement;
+          allThemes.forEach(function(t){ root.classList.remove(t); });
+          root.classList.add(saved);
+        } catch(e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- رأس الصفحة -->
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <a href="home.html" class="logo">
+            <i class="fas fa-glass-cheers"></i>
+            منصة حفلات
+          </a>
+
+          <nav>
+            <ul>
+              <li><a href="home.html" class="active">الرئيسية</a></li>
+              <li><a href="halls.html">القاعات</a></li>
+              <li><a href="teams.html">الفرق</a></li>
+              <li><a href="about.html">من نحن</a></li>
+              <li><a href="contact.html">اتصل بنا</a></li>
+            </ul>
+          </nav>
+
+          <div class="theme-switcher">
+            <div
+              class="theme-circle theme-light-circle active"
+              data-theme="theme-light"
+            ></div>
+            <div
+              class="theme-circle theme-dark-circle"
+              data-theme="theme-dark"
+            ></div>
+            <div
+              class="theme-circle theme-blue-circle"
+              data-theme="theme-blue"
+            ></div>
+            <div
+              class="theme-circle theme-green-circle"
+              data-theme="theme-green"
+            ></div>
+          </div>
+
+          <div class="auth-buttons">
+            <button
+              type="button"
+              class="btn btn-outline"
+              onclick="window.location.href='index.html'"
+            >
+              تسجيل الدخول
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="window.location.href='index.html'"
+            >
+              إنشاء حساب
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- قسم البطل -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>احجز قاعة حفلاتك أو فريق الترفيه المفضل</h1>
+          <p>
+            اكتشف أفضل القاعات والفرق الموسيقية لحفلاتك وأعراسك في مكان واحد
+          </p>
+
+          <div class="search-box">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="ابحث حسب المدينة، التاريخ، الميزانية..."
+            />
+            <button class="search-btn">ابحث الآن</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- قسم القاعات -->
+    <section id="halls">
+      <div class="container">
+        <div class="section-header">
+          <h2>القاعات المتاحة</h2>
+          <p>
+            اختر من بين مجموعة متنوعة من القاعات المناسبة لجميع أنواع المناسبات
+          </p>
+        </div>
+
+        <div class="filters">
+          <div class="filter-group">
+            <div class="filter-item">
+              <label for="capacity">السعة</label>
+              <select id="capacity">
+                <option value="">جميع السعات</option>
+                <option value="50">حتى 50 شخص</option>
+                <option value="100">50 - 100 شخص</option>
+                <option value="200">100 - 200 شخص</option>
+                <option value="300">أكثر من 200 شخص</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label for="district">الحي</label>
+              <select id="district">
+                <option value="">جميع الأحياء</option>
+                <option value="north">الشمال</option>
+                <option value="south">الجنوب</option>
+                <option value="east">الشرق</option>
+                <option value="west">الغرب</option>
+                <option value="center">الوسط</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label for="price">السعر</label>
+              <select id="price">
+                <option value="">جميع الأسعار</option>
+                <option value="low">اقتصادي</option>
+                <option value="medium">متوسط</option>
+                <option value="high">فاخر</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label for="date">التاريخ</label>
+              <input type="date" id="date" />
+            </div>
+          </div>
+
+          <div class="filter-actions">
+            <button class="btn btn-outline" id="resetFilters">
+              إعادة تعيين
+            </button>
+            <button class="btn btn-primary" id="applyFilters">
+              تطبيق الفلترة
+            </button>
+          </div>
+        </div>
+
+        <div class="cards-container" id="hallsContainer">
+          <!-- سيتم ملء هذا القسم بالبيانات من JavaScript -->
+        </div>
+
+        <div style="text-align: center; margin-top: 40px">
+          <a href="halls.html" class="btn btn-primary">عرض جميع القاعات</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- قسم الفرق -->
+    <section id="teams">
+      <div class="container">
+        <div class="section-header">
+          <h2>الفرق الموسيقية</h2>
+          <p>
+            اختر من بين أفضل الفرق الموسيقية والترفيهية لإضفاء البهجة على حفلاتك
+          </p>
+        </div>
+
+        <div class="filters">
+          <div class="filter-group">
+            <div class="filter-item">
+              <label for="music-type">النوع الموسيقي</label>
+              <select id="music-type">
+                <option value="">جميع الأنواع</option>
+                <option value="arabic">عربي</option>
+                <option value="western">غربي</option>
+                <option value="mix">مختلط</option>
+                <option value="traditional">تقليدي</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label for="team-size">عدد الأعضاء</label>
+              <select id="team-size">
+                <option value="">جميع الأحجام</option>
+                <option value="solo">فردي</option>
+                <option value="small">صغير (2-4)</option>
+                <option value="medium">متوسط (5-7)</option>
+                <option value="large">كبير (8+)</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label for="team-price">السعر</label>
+              <select id="team-price">
+                <option value="">جميع الأسعار</option>
+                <option value="low">اقتصادي</option>
+                <option value="medium">متوسط</option>
+                <option value="high">فاخر</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label for="team-date">التاريخ</label>
+              <input type="date" id="team-date" />
+            </div>
+          </div>
+
+          <div class="filter-actions">
+            <button class="btn btn-outline" id="resetTeamFilters">
+              إعادة تعيين
+            </button>
+            <button class="btn btn-primary" id="applyTeamFilters">
+              تطبيق الفلترة
+            </button>
+          </div>
+        </div>
+
+        <div class="cards-container" id="teamsContainer">
+          <!-- سيتم ملء هذا القسم بالبيانات من JavaScript -->
+        </div>
+
+        <div style="text-align: center; margin-top: 40px">
+          <a href="teams.html" class="btn btn-primary">عرض جميع الفرق</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- قسم المعرض -->
+    <section id="gallery">
+      <div class="container">
+        <div class="section-header">
+          <h2>المعرض</h2>
+          <p>لقطات مميزة من القاعات والفعاليات السابقة</p>
+        </div>
+        <div class="gallery-grid">
+          <div><img loading="lazy" src="img/gallery-1.jpg" alt="قاعة أفراح" /></div>
+          <div><img loading="lazy" src="img/gallery-2.jpg" alt="تجهيزات إضاءة" /></div>
+          <div><img loading="lazy" src="img/gallery-3.jpg" alt="ديكور حفلات" /></div>
+          <div><img loading="lazy" src="img/gallery-4.jpg" alt="ترتيب الطاولات" /></div>
+          <div><img loading="lazy" src="img/gallery-5.jpg" alt="حفلة موسيقية" /></div>
+          <div><img loading="lazy" src="img/gallery-6.jpg" alt="قاعة مزينة" /></div>
+          <div><img loading="lazy" src="img/gallery-7.jpg" alt="رقص وزفاف" /></div>
+          <div><img loading="lazy" src="img/gallery-8.jpg" alt="إضاءة وإبهار" /></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- فوتر -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-column">
+            <h3>منصة حفلات</h3>
+            <p>
+              منصة متكاملة لخدمات حجز القاعات والفرق الموسيقية لحفلاتك ومناسباتك
+              الخاصة. نوفر لك أفضل الخيارات بأفضل الأسعار.
+            </p>
+            <div class="social-icons">
+              <a href="#" class="social-icon"
+                ><i class="fab fa-facebook-f"></i
+              ></a>
+              <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-icon"
+                ><i class="fab fa-instagram"></i
+              ></a>
+              <a href="#" class="social-icon"
+                ><i class="fab fa-snapchat-ghost"></i
+              ></a>
+              <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-column">
+            <h3>روابط سريعة</h3>
+            <ul class="footer-links">
+              <li><a href="home.html">الرئيسية</a></li>
+              <li><a href="halls.html">القاعات</a></li>
+              <li><a href="teams.html">الفرق</a></li>
+              <li><a href="booking.html">نموذج الحجز</a></li>
+              <li><a href="about.html">من نحن</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h3>معلومات إضافية</h3>
+            <ul class="footer-links">
+              <li><a href="faq.html">الأسئلة الشائعة</a></li>
+              <li><a href="terms.html">الشروط والأحكام</a></li>
+              <li><a href="privacy.html">سياسة الخصوصية</a></li>
+              <li><a href="cancellation.html">سياسة الإلغاء</a></li>
+              <li><a href="contact.html">اتصل بنا</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h3>اشترك في نشرتنا</h3>
+            <p>اشترك في نشرتنا البريدية لتصلك آخر العروض والتخفيضات.</p>
+            <div class="subscribe-form">
+              <input type="email" placeholder="بريدك الإلكتروني" />
+              <button class="btn btn-primary">اشترك</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>جميع الحقوق محفوظة &copy; 2023 منصة حفلات</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/home.js"></script>
+  </body>
+</html>

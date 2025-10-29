@@ -1,0 +1,11 @@
+/* نموذج اتصل بنا */
+.form-card { max-width: 700px; margin: 0 auto; background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: var(--shadow); }
+.form-grid-2 { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+.form-grid-2 > * { min-width: 0; }
+.form-card input, .form-card select, .form-card textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #fff; color: var(--text-color); transition: box-shadow .2s ease, border-color .2s ease; }
+.form-card input:focus, .form-card select:focus, .form-card textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(91,108,255,.15); }
+.alert { display: none; margin-top: 12px; padding: 10px; border-radius: 8px; font-weight: 600; }
+.alert--error { color: #d64c42; background: rgba(214,76,66,0.08); }
+.alert--success { color: #2e7d32; background: rgba(46,125,50,0.08); }
+.form-actions { margin-top: 14px; text-align: left; }
+@media (max-width: 700px) { .form-grid-2 { grid-template-columns: 1fr; } }

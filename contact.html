@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة حفلات - اتصل بنا</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/contact.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="theme-light">
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="home.html" class="logo">
+          <i class="fas fa-glass-cheers"></i>
+          منصة حفلات
+        </a>
+        <nav>
+          <ul>
+            <li><a href="home.html">الرئيسية</a></li>
+            <li><a href="halls.html">القاعات</a></li>
+            <li><a href="teams.html">الفرق</a></li>
+            <li><a href="about.html">من نحن</a></li>
+            <li><a href="contact.html" class="active">اتصل بنا</a></li>
+          </ul>
+        </nav>
+        <div class="theme-switcher">
+          <div class="theme-circle theme-light-circle active" data-theme="theme-light"></div>
+          <div class="theme-circle theme-dark-circle" data-theme="theme-dark"></div>
+          <div class="theme-circle theme-blue-circle" data-theme="theme-blue"></div>
+          <div class="theme-circle theme-green-circle" data-theme="theme-green"></div>
+        </div>
+        <div class="auth-buttons">
+          <button type="button" class="btn btn-outline" onclick="window.location.href='index.html'">تسجيل الدخول</button>
+          <button type="button" class="btn btn-primary" onclick="window.location.href='index.html?signup=1'">إنشاء حساب</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>اتصل بنا</h1>
+        <p>يسعدنا تواصلك معنا. هذه الصفحة قيد الإنشاء.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2>نموذج التواصل</h2>
+        <p>أرسل لنا رسالتك وسنعاود التواصل معك قريباً.</p>
+      </div>
+
+      <form id="contactForm" class="form-card" novalidate>
+        <div class="form-grid-2">
+          <div>
+            <label for="cname">الاسم الكامل</label>
+            <input id="cname" type="text" placeholder="اسمك">
+          </div>
+          <div>
+            <label for="cemail">البريد الإلكتروني</label>
+            <input id="cemail" type="email" placeholder="your@email.com">
+          </div>
+          <div style="grid-column:1 / -1;">
+            <label for="csubject">الموضوع</label>
+            <input id="csubject" type="text" placeholder="موضوع الرسالة">
+          </div>
+          <div style="grid-column:1 / -1;">
+            <label for="cmessage">الرسالة</label>
+            <textarea id="cmessage" rows="5" placeholder="نص رسالتك"></textarea>
+          </div>
+        </div>
+        <div id="contactError" class="alert alert--error" role="alert" aria-live="polite"></div>
+        <div id="contactSuccess" class="alert alert--success" role="status" aria-live="polite"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">إرسال</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script src="js/home.js"></script>
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('cname').value.trim();
+      const email = document.getElementById('cemail').value.trim();
+      const subject = document.getElementById('csubject').value.trim();
+      const message = document.getElementById('cmessage').value.trim();
+      const err = document.getElementById('contactError');
+      const ok = document.getElementById('contactSuccess');
+      err.style.display = 'none'; err.textContent = '';
+      ok.style.display = 'none'; ok.textContent = '';
+
+      const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if(!name || !email || !subject || !message){
+        err.textContent = 'يرجى تعبئة جميع الحقول';
+        err.style.display = 'block';
+        return;
+      }
+      if(!emailRx.test(email)){
+        err.textContent = 'صيغة البريد الإلكتروني غير صحيحة';
+        err.style.display = 'block';
+        return;
+      }
+
+      ok.textContent = 'تم إرسال رسالتك بنجاح';
+      ok.style.display = 'block';
+      this.reset();
+    });
+  </script>
+</body>
+</html>
