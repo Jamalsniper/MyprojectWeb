@@ -7,7 +7,7 @@
     <script>
       (function() {
         try {
-          var allThemes = ['theme-light','theme-dark','theme-blue','theme-green'];
+          var allThemes = ['theme-light','theme-dark','theme-blue','theme-green','theme-purpleblue','theme-redpink'];
           var saved = localStorage.getItem('selectedTheme') || 'theme-light';
           var root = document.documentElement;
           allThemes.forEach(function(t){ root.classList.remove(t); });
@@ -16,6 +16,7 @@
       })();
     </script>
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/gamal.css" />
     <link rel="stylesheet" href="css/home.css" />
     <link
       rel="stylesheet"
@@ -41,26 +42,10 @@
               <li><a href="contact.html">اتصل بنا</a></li>
             </ul>
           </nav>
-
           <div class="theme-switcher">
-            <div
-              class="theme-circle theme-light-circle active"
-              data-theme="theme-light"
-            ></div>
-            <div
-              class="theme-circle theme-dark-circle"
-              data-theme="theme-dark"
-            ></div>
-            <div
-              class="theme-circle theme-blue-circle"
-              data-theme="theme-blue"
-            ></div>
-            <div
-              class="theme-circle theme-green-circle"
-              data-theme="theme-green"
-            ></div>
-          </div>
-
+          <div class="theme-circle" data-theme="theme-purpleblue" title="بنفسجي/أزرق" style="background: linear-gradient(135deg, #8e2de2, #4a00e0);"></div>
+          <div class="theme-circle" data-theme="theme-redpink" title="أحمر/وردي" style="background: linear-gradient(135deg, #ff512f, #dd2476);"></div>
+        </div>
           <div class="auth-buttons">
             <button
               type="button"
@@ -112,56 +97,7 @@
           </p>
         </div>
 
-        <div class="filters">
-          <div class="filter-group">
-            <div class="filter-item">
-              <label for="capacity">السعة</label>
-              <select id="capacity">
-                <option value="">جميع السعات</option>
-                <option value="50">حتى 50 شخص</option>
-                <option value="100">50 - 100 شخص</option>
-                <option value="200">100 - 200 شخص</option>
-                <option value="300">أكثر من 200 شخص</option>
-              </select>
-            </div>
-
-            <div class="filter-item">
-              <label for="district">الحي</label>
-              <select id="district">
-                <option value="">جميع الأحياء</option>
-                <option value="north">الشمال</option>
-                <option value="south">الجنوب</option>
-                <option value="east">الشرق</option>
-                <option value="west">الغرب</option>
-                <option value="center">الوسط</option>
-              </select>
-            </div>
-
-            <div class="filter-item">
-              <label for="price">السعر</label>
-              <select id="price">
-                <option value="">جميع الأسعار</option>
-                <option value="low">اقتصادي</option>
-                <option value="medium">متوسط</option>
-                <option value="high">فاخر</option>
-              </select>
-            </div>
-
-            <div class="filter-item">
-              <label for="date">التاريخ</label>
-              <input type="date" id="date" />
-            </div>
-          </div>
-
-          <div class="filter-actions">
-            <button class="btn btn-outline" id="resetFilters">
-              إعادة تعيين
-            </button>
-            <button class="btn btn-primary" id="applyFilters">
-              تطبيق الفلترة
-            </button>
-          </div>
-        </div>
+        
 
         <div class="cards-container" id="hallsContainer">
           <!-- سيتم ملء هذا القسم بالبيانات من JavaScript -->
@@ -183,55 +119,7 @@
           </p>
         </div>
 
-        <div class="filters">
-          <div class="filter-group">
-            <div class="filter-item">
-              <label for="music-type">النوع الموسيقي</label>
-              <select id="music-type">
-                <option value="">جميع الأنواع</option>
-                <option value="arabic">عربي</option>
-                <option value="western">غربي</option>
-                <option value="mix">مختلط</option>
-                <option value="traditional">تقليدي</option>
-              </select>
-            </div>
-
-            <div class="filter-item">
-              <label for="team-size">عدد الأعضاء</label>
-              <select id="team-size">
-                <option value="">جميع الأحجام</option>
-                <option value="solo">فردي</option>
-                <option value="small">صغير (2-4)</option>
-                <option value="medium">متوسط (5-7)</option>
-                <option value="large">كبير (8+)</option>
-              </select>
-            </div>
-
-            <div class="filter-item">
-              <label for="team-price">السعر</label>
-              <select id="team-price">
-                <option value="">جميع الأسعار</option>
-                <option value="low">اقتصادي</option>
-                <option value="medium">متوسط</option>
-                <option value="high">فاخر</option>
-              </select>
-            </div>
-
-            <div class="filter-item">
-              <label for="team-date">التاريخ</label>
-              <input type="date" id="team-date" />
-            </div>
-          </div>
-
-          <div class="filter-actions">
-            <button class="btn btn-outline" id="resetTeamFilters">
-              إعادة تعيين
-            </button>
-            <button class="btn btn-primary" id="applyTeamFilters">
-              تطبيق الفلترة
-            </button>
-          </div>
-        </div>
+        
 
         <div class="cards-container" id="teamsContainer">
           <!-- سيتم ملء هذا القسم بالبيانات من JavaScript -->
@@ -327,5 +215,32 @@
     </footer>
 
     <script src="js/home.js"></script>
+    <script>
+      // ربط احتياطي لحدث النقر على دوائر الثيم لضمان العمل حتى لو لم تُستدعَ التهيئة الأساسية
+      (function() {
+        var bind = function(){
+          var circles = document.querySelectorAll('.theme-circle[data-theme]');
+          if (!circles.length) return;
+          var themes = ['theme-light','theme-dark','theme-blue','theme-green','theme-purpleblue','theme-redpink'];
+          circles.forEach(function(c){
+            if (c.__themeBound) return; // منع التكرار
+            c.__themeBound = true;
+            c.addEventListener('click', function(){
+              var theme = c.getAttribute('data-theme');
+              try { localStorage.setItem('selectedTheme', theme); } catch(e) {}
+              themes.forEach(function(t){ document.body.classList.remove(t); document.documentElement.classList.remove(t); });
+              document.documentElement.classList.add(theme);
+            });
+          });
+        };
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', bind);
+        } else { bind(); }
+        // استدعِ مبدّل الثيمات الأصلي إن كان متاحاً
+        if (typeof setupThemeSwitcher === 'function') {
+          try { setupThemeSwitcher(); } catch(e) {}
+        }
+      })();
+    </script>
   </body>
 </html>

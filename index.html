@@ -99,6 +99,7 @@
     </style>
   </head>
   <body>
+    <div id="userWelcome" style="position:fixed;top:12px;inset-inline:12px auto;background:#ffffff22;color:#fff;padding:8px 12px;border-radius:8px;border:1px solid #ffffff44;backdrop-filter: blur(6px);display:none;z-index:10;font-weight:600"></div>
     <div class="main">		
       <input type="checkbox" id="chk" aria-hidden="true">
         <div class="signup">
@@ -127,23 +128,39 @@
         const chk = document.getElementById('chk');
         const params = new URLSearchParams(window.location.search);
         if (params.get('signup') === '1' && chk) { chk.checked = true; }
+        function showWelcome(){
+          try{
+            const uw = document.getElementById('userWelcome');
+            const uname = localStorage.getItem('username');
+            if (uw && uname){ uw.textContent = 'مرحباً، ' + uname; uw.style.display='block'; }
+          }catch(e){}
+        }
         function goHome(msg){ try{ alert(msg); }catch(e){} window.location.href='home.html'; }
+        // عرض الاسم إن كان محفوظاً مسبقاً
+        showWelcome();
         if (loginForm){
-          loginForm.addEventListener('submit', function(e){
+          loginForm.onsubmit = function(e){
             e.preventDefault();
-            const username = (loginForm.querySelector('input[name="text"]')?.value || '').trim().toLowerCase();
+            const usernameRaw = (loginForm.querySelector('input[name="text"]')?.value || '').trim();
+            const username = usernameRaw.toLowerCase();
             const password = (loginForm.querySelector('input[name="pswd"]')?.value || '').trim();
             const validUser = username === 'gamal' || username === 'myadah';
             const validPass = password === '123';
             if (validUser && validPass) {
+              try{ localStorage.setItem('username', usernameRaw); }catch(e){}
               goHome('تم تسجيل الدخول بنجاح');
             } else {
               alert('اسم المستخدم أو كلمة السر غير صحيحة');
             }
-          });
+          };
         }
         if (signupForm){
-          signupForm.addEventListener('submit', function(e){ e.preventDefault(); goHome('تم إنشاء الحساب وتسجيل الدخول'); });
+          signupForm.onsubmit = function(e){ 
+            e.preventDefault(); 
+            const newUser = (signupForm.querySelector('input[name="txt"]')?.value || '').trim();
+            try{ if(newUser) localStorage.setItem('username', newUser); }catch(_){}
+            goHome('تم إنشاء الحساب وتسجيل الدخول'); 
+          };
         }
       })();
     </script>

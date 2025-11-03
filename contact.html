@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>منصة حفلات - اتصل بنا</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/gamal.css">
   <link rel="stylesheet" href="css/contact.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -25,12 +26,6 @@
             <li><a href="contact.html" class="active">اتصل بنا</a></li>
           </ul>
         </nav>
-        <div class="theme-switcher">
-          <div class="theme-circle theme-light-circle active" data-theme="theme-light"></div>
-          <div class="theme-circle theme-dark-circle" data-theme="theme-dark"></div>
-          <div class="theme-circle theme-blue-circle" data-theme="theme-blue"></div>
-          <div class="theme-circle theme-green-circle" data-theme="theme-green"></div>
-        </div>
         <div class="auth-buttons">
           <button type="button" class="btn btn-outline" onclick="window.location.href='index.html'">تسجيل الدخول</button>
           <button type="button" class="btn btn-primary" onclick="window.location.href='index.html?signup=1'">إنشاء حساب</button>
@@ -51,7 +46,7 @@
   <section>
     <div class="container">
       <div class="section-header">
-        <h2>نموذج التواصل</h2>
+        <h2> اتصل بنا </h2>
         <p>أرسل لنا رسالتك وسنعاود التواصل معك قريباً.</p>
       </div>
 
@@ -85,7 +80,7 @@
 
   <script src="js/home.js"></script>
   <script>
-    document.getElementById('contactForm').addEventListener('submit', function(e){
+    document.getElementById('contactForm').onsubmit = function(e){
       e.preventDefault();
       const name = document.getElementById('cname').value.trim();
       const email = document.getElementById('cemail').value.trim();
@@ -111,7 +106,7 @@
       ok.textContent = 'تم إرسال رسالتك بنجاح';
       ok.style.display = 'block';
       this.reset();
-    });
+    };
   </script>
 </body>
 </html>

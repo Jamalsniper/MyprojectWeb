@@ -43,29 +43,20 @@ function setupGradientPicker() {
     const btn = document.createElement('div');
     btn.id = 'gradientPickerBtn';
     btn.title = 'اختيار تدرج لوني';
-    Object.assign(btn.style, {
-        width: '20px', height: '20px', borderRadius: '50%', cursor: 'pointer',
-        border: '2px solid rgba(0,0,0,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-        background: 'linear-gradient(135deg, #8e2de2, #4a00e0)'
-    });
+    btn.classList.add('gradient-picker-btn');
     if (host.classList.contains('theme-switcher')) {
         host.appendChild(btn);
     } else {
-        Object.assign(btn.style, { position: 'fixed', right: '20px', bottom: '90px', zIndex: '1000' });
         document.body.appendChild(btn);
     }
 
     const panel = document.createElement('div');
     panel.id = 'gradientPickerPanel';
-    Object.assign(panel.style, {
-        position: 'fixed', right: '20px', bottom: '120px', background: 'var(--card-bg)', color: 'inherit',
-        borderRadius: '12px', boxShadow: '0 12px 32px rgba(0,0,0,0.18)', padding: '10px', display: 'none',
-        minWidth: '220px', zIndex: '1000', direction: 'rtl', border: '1px solid var(--border-color)'
-    });
+    panel.classList.add('gradient-panel');
 
     const title = document.createElement('div');
     title.textContent = 'اختر تدرجاً لونياً';
-    Object.assign(title.style, { fontWeight: '700', marginBottom: '8px' });
+    title.classList.add('title');
     panel.appendChild(title);
 
     const gradients = [
@@ -78,34 +69,33 @@ function setupGradientPicker() {
     ];
 
     const grid = document.createElement('div');
-    Object.assign(grid.style, { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '8px' });
+    grid.classList.add('gradient-grid');
     gradients.forEach(g => {
         const sw = document.createElement('button');
         sw.type = 'button';
-        Object.assign(sw.style, {
-            width: '56px', height: '34px', borderRadius: '8px', border: '1px solid var(--border-color)', cursor: 'pointer', background: g
-        });
-        sw.addEventListener('click', () => {
+        sw.classList.add('gradient-swatch');
+        sw.style.background = g;
+        sw.onclick = () => {
             try { localStorage.setItem('customGradient', g); } catch (e) {}
             document.documentElement.style.setProperty('--gradient', g);
             panel.style.display = 'none';
-        });
+        };
         grid.appendChild(sw);
     });
     panel.appendChild(grid);
 
     const actions = document.createElement('div');
-    Object.assign(actions.style, { display: 'flex', gap: '8px', justifyContent: 'space-between' });
+    actions.classList.add('actions');
     const reset = document.createElement('button'); reset.type = 'button'; reset.textContent = 'إعادة الافتراضي';
-    Object.assign(reset.style, { padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--card-bg)', cursor: 'pointer' });
-    reset.addEventListener('click', () => {
+    reset.classList.add('btn-plain');
+    reset.onclick = () => {
         try { localStorage.removeItem('customGradient'); } catch (e) {}
         document.documentElement.style.removeProperty('--gradient');
         panel.style.display = 'none';
-    });
+    };
     const close = document.createElement('button'); close.type = 'button'; close.textContent = 'إغلاق';
-    Object.assign(close.style, { padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--card-bg)', cursor: 'pointer' });
-    close.addEventListener('click', () => { panel.style.display = 'none'; });
+    close.classList.add('btn-plain');
+    close.onclick = () => { panel.style.display = 'none'; };
     actions.appendChild(reset); actions.appendChild(close);
     panel.appendChild(actions);
 
@@ -115,45 +105,28 @@ function setupGradientPicker() {
         e.stopPropagation();
         panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
     };
-    btn.addEventListener('click', toggle);
-    panel.addEventListener('click', (e) => e.stopPropagation());
-    document.addEventListener('click', () => { panel.style.display = 'none'; });
+    btn.onclick = toggle;
+    panel.onclick = (e) => e.stopPropagation();
+    document.onclick = () => { panel.style.display = 'none'; };
 }
 
-// زر عائم للعودة للأعلى
 function setupScrollToTop() {
     const btn = document.createElement('button');
     btn.id = 'scrollTopBtn';
     btn.setAttribute('aria-label', 'العودة إلى أعلى الصفحة');
     btn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-    Object.assign(btn.style, {
-        position: 'fixed',
-        right: '80px',
-        bottom: '20px',
-        width: '48px',
-        height: '48px',
-        borderRadius: '50%',
-        background: 'var(--primary, #5b6cff)',
-        color: '#fff',
-        border: 'none',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-        cursor: 'pointer',
-        zIndex: '1000',
-        display: 'none',
-        alignItems: 'center',
-        justifyContent: 'center'
-    });
+    btn.classList.add('scroll-top-btn');
     document.body.appendChild(btn);
 
     const onScroll = () => {
         if (window.scrollY > 300) {
-            btn.style.display = 'flex';
+            btn.classList.add('show');
         } else {
-            btn.style.display = 'none';
+            btn.classList.remove('show');
         }
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    window.onscroll = onScroll;
+    btn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // مؤثر كشف عام يضيف reveal-in للعناصر المعلمة
@@ -220,16 +193,16 @@ function setupRevealAnimations() {
 })();
 
 // دالة لتمييز رابط التنقل النشط بحسب الصفحة الحالية
-function setupActiveNav() {
-    const links = document.querySelectorAll('nav a');
-    if (!links.length) return;
-    const current = location.pathname.split('/').pop() || 'home.html';
-    links.forEach(a => {
-        const href = a.getAttribute('href');
-        if (href === current) {
-            a.classList.add('active');
-        } else {
-            a.classList.remove('active');
+function setupActiveNav() { // [جميع الصفحات التي تحتوي شريط تنقل]
+    const links = document.querySelectorAll('nav a'); // [عام]
+    if (!links.length) return; // [عام]
+    const current = location.pathname.split('/').pop() || 'home.html'; // [عام] تحديد الصفحة الحالية
+    links.forEach(a => { // [عام]
+        const href = a.getAttribute('href'); // [عام]
+        if (href === current) { // [عام]
+            a.classList.add('active'); // [عام] تمييز الرابط النشط
+        } else { // [عام]
+            a.classList.remove('active'); // [عام] إزالة التمييز عن الباقي
         }
     });
 }
@@ -275,16 +248,16 @@ const teamsData = [
 ];
 
 // دالة لإنشاء بطاقات القاعات
-function renderHalls(halls) {
-    const container = document.getElementById('hallsContainer');
-    if (!container) return;
-    container.innerHTML = '';
+function renderHalls(halls) { // [home.html,halls.html] توليد بطاقات القاعات داخل الحاوية
+    const container = document.getElementById('hallsContainer'); // [home.html,halls.html] مرجع الحاوية
+    if (!container) return; // [home.html,halls.html] إن لم توجد الحاوية لا نفعل شيئاً
+    container.innerHTML = ''; // [home.html,halls.html] تفريغ المحتوى قبل إعادة الرسم
     
-    halls.forEach(hall => {
-        const ratingStars = generateRatingStars(hall.rating);
+    halls.forEach(hall => { // [home.html,halls.html] تكرار على عناصر القاعات
+        const ratingStars = generateRatingStars(hall.rating); // [home.html,halls.html] حساب نجوم التقييم
         
-        const card = document.createElement('div');
-        card.className = 'card';
+        const card = document.createElement('div'); // [home.html,halls.html] إنشاء عنصر البطاقة
+        card.className = 'card'; // [home.html,halls.html] إضافة صنف البطاقة
         card.innerHTML = `
             <div class="card-img">
                 <img src="${hall.image}" alt="${hall.name}" loading="lazy" style="cursor:pointer" aria-label="حجز ${hall.name}">
@@ -308,33 +281,36 @@ function renderHalls(halls) {
         `;
         
         // عند النقر على صورة القاعة الانتقال لنموذج الحجز مع حفظ البيانات
-        const img = card.querySelector('.card-img img');
-        if (img) {
-            img.addEventListener('click', () => {
-                try {
-                    localStorage.setItem('selectedHall', JSON.stringify(hall));
+        const img = card.querySelector('.card-img img'); // [home.html,halls.html] مرجع صورة البطاقة للنقر
+        if (img) { // [home.html,halls.html]
+            img.onclick = () => { // [home.html,halls.html] عند النقر الانتقال لصفحة الحجز
+                const ok = confirm('هل تريد الحجز؟'); // [home.html,halls.html] تأكيد بسيط
+                if (!ok) return; // [home.html,halls.html]
+                try { // [home.html,halls.html]
+                    localStorage.setItem('selectedHall', JSON.stringify(hall)); // [home.html,halls.html] حفظ القاعة المختارة
+                    sessionStorage.setItem('lockBookingType', 'hall'); // [home.html,halls.html] قفل نوع الحجز إلى قاعة
                 } catch (e) {}
-                location.href = 'booking.html';
-            });
+                location.href = 'booking.html'; // [home.html,halls.html] الانتقال للنموذج
+            };
         }
 
         container.appendChild(card);
     });
 
-    const resultsCount = document.getElementById('resultsCount');
-    if (resultsCount) {
-        resultsCount.textContent = halls.length;
+    const resultsCount = document.getElementById('resultsCount'); // [halls.html] عدد النتائج إن وُجد
+    if (resultsCount) { // [halls.html]
+        resultsCount.textContent = halls.length; // [halls.html]
     }
 }
 
 // دالة لإنشاء بطاقات الفرق
-function renderTeams(teams) {
-    const container = document.getElementById('teamsContainer');
-    if (!container) return;
-    container.innerHTML = '';
+function renderTeams(teams) { // [home.html,teams.html] توليد بطاقات الفرق داخل الحاوية
+    const container = document.getElementById('teamsContainer'); // [home.html,teams.html]
+    if (!container) return; // [home.html,teams.html]
+    container.innerHTML = ''; // [home.html,teams.html]
     
-    teams.forEach(team => {
-        const ratingStars = generateRatingStars(team.rating);
+    teams.forEach(team => { // [home.html,teams.html]
+        const ratingStars = generateRatingStars(team.rating); // [home.html,teams.html]
         
         const card = document.createElement('div');
         card.className = 'card';
@@ -360,16 +336,19 @@ function renderTeams(teams) {
             </div>
         `;
         // عند النقر على صورة الفرقة الانتقال لنموذج الحجز مع حفظ البيانات
-        const timg = card.querySelector('.card-img img');
-        if (timg) {
-            timg.style.cursor = 'pointer';
-            timg.setAttribute('aria-label', `حجز ${team.name}`);
-            timg.addEventListener('click', () => {
-                try {
-                    localStorage.setItem('selectedTeam', JSON.stringify(team));
+        const timg = card.querySelector('.card-img img'); // [home.html,teams.html]
+        if (timg) { // [home.html,teams.html]
+            timg.style.cursor = 'pointer'; // [home.html,teams.html]
+            timg.setAttribute('aria-label', `حجز ${team.name}`); // [home.html,teams.html]
+            timg.onclick = () => { // [home.html,teams.html]
+                const ok = confirm('هل تريد الحجز؟'); // [home.html,teams.html]
+                if (!ok) return; // [home.html,teams.html]
+                try { // [home.html,teams.html]
+                    localStorage.setItem('selectedTeam', JSON.stringify(team)); // [home.html,teams.html]
+                    sessionStorage.setItem('lockBookingType', 'team'); // [home.html,teams.html]
                 } catch (e) {}
-                location.href = 'booking.html';
-            });
+                location.href = 'booking.html'; // [home.html,teams.html]
+            };
         }
 
         container.appendChild(card);
@@ -377,141 +356,33 @@ function renderTeams(teams) {
 }
 
 // دالة لإنشاء نجوم التقييم
-function generateRatingStars(rating) {
-    let stars = '';
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
+function generateRatingStars(rating) { // [مشترك] إنشاء أيقونات النجوم حسب التقييم
+    let stars = ''; // [مشترك]
+    const fullStars = Math.floor(rating); // [مشترك]
+    const hasHalfStar = rating % 1 !== 0; // [مشترك]
     
-    for (let i = 0; i < fullStars; i++) {
-        stars += '<i class="fas fa-star"></i>';
+    for (let i = 0; i < fullStars; i++) { // [مشترك]
+        stars += '<i class="fas fa-star"></i>'; // [مشترك]
     }
     
-    if (hasHalfStar) {
-        stars += '<i class="fas fa-star-half-alt"></i>';
+    if (hasHalfStar) { // [مشترك]
+        stars += '<i class="fas fa-star-half-alt"></i>'; // [مشترك]
     }
     
-    const emptyStars = 5 - Math.ceil(rating);
-    for (let i = 0; i < emptyStars; i++) {
-        stars += '<i class="far fa-star"></i>';
+    const emptyStars = 5 - Math.ceil(rating); // [مشترك]
+    for (let i = 0; i < emptyStars; i++) { // [مشترك]
+        stars += '<i class="far fa-star"></i>'; // [مشترك]
     }
     
-    return stars;
+    return stars; // [مشترك]
 }
 
-// دالة لتطبيق الفلترة على القاعات
-function filterHalls() {
-    const capacityFilter = document.getElementById('capacity') ? document.getElementById('capacity').value : '';
-    const districtFilter = document.getElementById('district') ? document.getElementById('district').value : '';
-    const priceFilter = document.getElementById('price') ? document.getElementById('price').value : '';
-    const dateFilter = document.getElementById('date') ? document.getElementById('date').value : '';
-
-    const parseNumber = (str) => Number(String(str).replace(/[^\d]/g, '')) || 0;
-    const capacityNumber = (text) => parseNumber(text);
-
-    const priceBucket = (num) => {
-        if (num <= 3000) return 'low';
-        if (num > 3000 && num <= 4500) return 'medium';
-        return 'high';
-    };
-
-    const mapDistrict = (loc) => {
-        if (/الشمال/.test(loc)) return 'north';
-        if (/الجنوب/.test(loc)) return 'south';
-        if (/الشرق/.test(loc)) return 'east';
-        if (/الغرب/.test(loc)) return 'west';
-        if (/الوسط/.test(loc)) return 'center';
-        return '';
-    };
-
-    const filteredHalls = hallsData.filter(hall => {
-        const hallCapacity = capacityNumber(hall.capacity);
-        const hallPriceNum = parseNumber(hall.price);
-        const hallPriceBucket = priceBucket(hallPriceNum);
-        const hallDistrict = mapDistrict(hall.location);
-
-        const capacityPass = capacityFilter
-            ? (capacityFilter === '50' ? hallCapacity <= 50
-                : capacityFilter === '100' ? hallCapacity > 50 && hallCapacity <= 100
-                : capacityFilter === '200' ? hallCapacity > 100 && hallCapacity <= 200
-                : hallCapacity > 200)
-            : true;
-
-        const districtPass = districtFilter ? hallDistrict === districtFilter : true;
-        const pricePass = priceFilter ? hallPriceBucket === priceFilter : true;
-        const datePass = true; // لا توجد تواريخ في البيانات الحالية
-
-        return capacityPass && districtPass && pricePass && datePass;
-    });
-
-    renderHalls(filteredHalls);
-}
-
-// دالة لتطبيق الفلترة على الفرق
-function filterTeams() {
-    const typeFilter = document.getElementById('music-type') ? document.getElementById('music-type').value : '';
-    const sizeFilter = document.getElementById('team-size') ? document.getElementById('team-size').value : '';
-    const priceFilter = document.getElementById('team-price') ? document.getElementById('team-price').value : '';
-    const dateFilter = document.getElementById('team-date') ? document.getElementById('team-date').value : '';
-
-    const parseNumber = (str) => Number(String(str).replace(/[^\d]/g, '')) || 0;
-    const priceBucket = (num) => {
-        if (num <= 1500) return 'low';
-        if (num > 1500 && num <= 2200) return 'medium';
-        return 'high';
-    };
-
-    const filteredTeams = teamsData.filter(team => {
-        const teamPriceNum = parseNumber(team.price);
-        const teamPriceBucket = priceBucket(teamPriceNum);
-        const teamSizeNum = parseNumber(team.size);
-        const typeText = team.type;
-
-        const typePass = typeFilter
-            ? (typeFilter === 'arabic' ? /عربي/.test(typeText)
-                : typeFilter === 'western' ? /غربي/.test(typeText)
-                : typeFilter === 'mix' ? /مختلط/.test(typeText)
-                : /تقليدي/.test(typeText))
-            : true;
-
-        const sizePass = sizeFilter
-            ? (sizeFilter === 'solo' ? teamSizeNum === 1
-                : sizeFilter === 'small' ? teamSizeNum >= 2 && teamSizeNum <= 4
-                : sizeFilter === 'medium' ? teamSizeNum >= 5 && teamSizeNum <= 7
-                : teamSizeNum >= 8)
-            : true;
-
-        const pricePass = priceFilter ? teamPriceBucket === priceFilter : true;
-        const datePass = true;
-
-        return typePass && sizePass && pricePass && datePass;
-    });
-
-    renderTeams(filteredTeams);
-}
-
-// دالة لإعادة تعيين الفلاتر
-function resetFilters() {
-    document.getElementById('capacity').value = '';
-    document.getElementById('district').value = '';
-    document.getElementById('price').value = '';
-    document.getElementById('date').value = '';
-    renderHalls(hallsData);
-}
-
-// دالة لإعادة تعيين فلاتر الفرق
-function resetTeamFilters() {
-    document.getElementById('music-type').value = '';
-    document.getElementById('team-size').value = '';
-    document.getElementById('team-price').value = '';
-    document.getElementById('team-date').value = '';
-    renderTeams(teamsData);
-}
 
 // دالة لتبديل الثيمات
-function setupThemeSwitcher() {
-    const themeCircles = document.querySelectorAll('.theme-circle');
+function setupThemeSwitcher() { // [home.html وأي صفحة تحوي .theme-circle]
+    const themeCircles = document.querySelectorAll('.theme-circle'); // [home.html]
     // قائمة الثيمات المعروفة لضمان إزالة/إضافة الثيم حتى عند عدم وجود دوائر
-    const allThemes = ['theme-light', 'theme-dark', 'theme-blue', 'theme-green'];
+    const allThemes = ['theme-light', 'theme-dark', 'theme-blue', 'theme-green', 'theme-purpleblue', 'theme-redpink']; // [home.html]
 
     const applyTheme = (theme) => {
         if (!theme) return;
@@ -537,42 +408,42 @@ function setupThemeSwitcher() {
         setTimeout(() => document.documentElement.classList.remove('theme-changing'), 300);
     };
 
-    themeCircles.forEach(circle => {
-        circle.addEventListener('click', function() {
-            const theme = this.getAttribute('data-theme');
+    themeCircles.forEach(circle => { // [home.html]
+        circle.addEventListener('click', function() { // [home.html]
+            const theme = this.getAttribute('data-theme'); // [home.html]
             
             // إزالة الفئة النشطة من جميع الدوائر
-            themeCircles.forEach(c => c.classList.remove('active'));
+            themeCircles.forEach(c => c.classList.remove('active')); // [home.html]
             
             // إضافة الفئة النشطة للدائرة المختارة
-            this.classList.add('active');
+            this.classList.add('active'); // [home.html]
             
             // تغيير ثيم الصفحة
-            applyTheme(theme);
+            applyTheme(theme); // [home.html]
             
             // حفظ الثيم المختار في localStorage
-            localStorage.setItem('selectedTheme', theme);
+            localStorage.setItem('selectedTheme', theme); // [home.html]
         });
     });
     
     // تحميل الثيم المحفوظ إذا وجد
-    const savedTheme = localStorage.getItem('selectedTheme');
-    if (savedTheme) {
-        applyTheme(savedTheme);
+    const savedTheme = localStorage.getItem('selectedTheme'); // [home.html]
+    if (savedTheme) { // [home.html]
+        applyTheme(savedTheme); // [home.html]
         
         // تحديث الدوائر النشطة
-        themeCircles.forEach(circle => {
-            circle.classList.remove('active');
-            if (circle.getAttribute('data-theme') === savedTheme) {
-                circle.classList.add('active');
+        themeCircles.forEach(circle => { // [home.html]
+            circle.classList.remove('active'); // [home.html]
+            if (circle.getAttribute('data-theme') === savedTheme) { // [home.html]
+                circle.classList.add('active'); // [home.html]
             }
         });
-    } else if (themeCircles.length) {
-        const activeCircle = Array.from(themeCircles).find(c => c.classList.contains('active')) || themeCircles[0];
-        const initialTheme = activeCircle.getAttribute('data-theme');
-        applyTheme(initialTheme);
-        themeCircles.forEach(circle => circle.classList.remove('active'));
-        activeCircle.classList.add('active');
+    } else if (themeCircles.length) { // [home.html]
+        const activeCircle = Array.from(themeCircles).find(c => c.classList.contains('active')) || themeCircles[0]; // [home.html]
+        const initialTheme = activeCircle.getAttribute('data-theme'); // [home.html]
+        applyTheme(initialTheme); // [home.html]
+        themeCircles.forEach(circle => circle.classList.remove('active')); // [home.html]
+        activeCircle.classList.add('active'); // [home.html]
     }
 }
 
@@ -587,61 +458,21 @@ function setupQuickNavMenu() {
     btn.innerHTML = '<span style="display:block;width:22px;height:2px;background:currentColor;margin:3px 0"></span>' +
                     '<span style="display:block;width:22px;height:2px;background:currentColor;margin:3px 0"></span>' +
                     '<span style="display:block;width:22px;height:2px;background:currentColor;margin:3px 0"></span>';
-    Object.assign(btn.style, {
-        position: 'fixed',
-        right: '20px',
-        bottom: '20px',
-        width: '48px',
-        height: '48px',
-        borderRadius: '50%',
-        background: 'var(--primary, #5b6cff)',
-        color: '#fff',
-        border: 'none',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-        cursor: 'pointer',
-        zIndex: '1000',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-    });
+    btn.classList.add('quick-menu-btn');
 
     const menu = document.createElement('div');
     menu.id = 'quickMenu';
-    Object.assign(menu.style, {
-        position: 'fixed',
-        right: '20px',
-        bottom: '78px',
-        background: 'var(--card, #ffffff)',
-        color: 'inherit',
-        minWidth: '220px',
-        maxHeight: '60vh',
-        overflowY: 'auto',
-        borderRadius: '12px',
-        boxShadow: '0 12px 32px rgba(0,0,0,0.18)',
-        padding: '8px',
-        display: 'none',
-        zIndex: '1000',
-        direction: 'rtl'
-    });
+    menu.classList.add('quick-menu');
 
     const list = document.createElement('ul');
-    Object.assign(list.style, { listStyle: 'none', margin: '0', padding: '0' });
 
     existingLinks.forEach(a => {
         const li = document.createElement('li');
         const link = document.createElement('a');
         link.href = a.getAttribute('href') || '#';
         link.textContent = (a.textContent || '').trim() || a.getAttribute('href') || '';
-        Object.assign(link.style, {
-            display: 'block',
-            padding: '10px 12px',
-            borderRadius: '8px',
-            color: 'inherit',
-            textDecoration: 'none'
-        });
-        link.addEventListener('mouseenter', () => { link.style.background = 'rgba(0,0,0,0.06)'; });
-        link.addEventListener('mouseleave', () => { link.style.background = 'transparent'; });
-        link.addEventListener('click', () => hideMenu());
+        link.classList.add('quick-menu-link');
+        link.onclick = () => hideMenu();
         li.appendChild(link);
         list.appendChild(li);
     });
@@ -657,158 +488,172 @@ function setupQuickNavMenu() {
         if (menu.style.display === 'none') showMenu(); else hideMenu();
     };
 
-    btn.addEventListener('click', toggleMenu);
-    menu.addEventListener('click', (e) => e.stopPropagation());
-    document.addEventListener('click', hideMenu);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideMenu(); });
+    btn.onclick = toggleMenu;
+    menu.onclick = (e) => e.stopPropagation();
+    document.onclick = hideMenu;
+    document.onkeydown = (e) => { if (e.key === 'Escape') hideMenu(); };
 }
 // تهيئة الصفحة عند التحميل
-document.addEventListener('DOMContentLoaded', function() {
+window.onload = function() { // [جميع الصفحات] نقطة تهيئة عامة عند تحميل أي صفحة
     // عرض القاعات والفرق (إن وُجدت الحاويات)
-    if (document.getElementById('hallsContainer')) {
-        renderHalls(hallsData);
+    if (document.getElementById('hallsContainer')) { // [home.html,halls.html] تحقق من وجود حاوية القاعات
+        renderHalls(hallsData); // [home.html,halls.html] توليد بطاقات القاعات
+        window.__hallsQ = ''; // [home.html,halls.html] متغير عام احتياطي للاستعلام
     }
-    if (document.getElementById('teamsContainer')) {
-        renderTeams(teamsData);
+    if (document.getElementById('teamsContainer')) { // [home.html,teams.html] تحقق من وجود حاوية الفرق
+        renderTeams(teamsData); // [home.html,teams.html] توليد بطاقات الفرق
     }
     
-    // إعداد تبديل الثيمات
-    setupThemeSwitcher();
-    // منتقي التدرجات اللونية
-    setupGradientPicker();
+    // تعطيل ميزات الثيم والتدرجات حسب الطلب
 
     // تمييز رابط التنقل النشط
-    setupActiveNav();
+    setupActiveNav(); // [جميع الصفحات التي تحتوي nav] تحديد الرابط النشط في القائمة
     
-    // قائمة سريعة للتنقل
-    setupQuickNavMenu();
+    // تفعيل مبدّل الثيمات إن وُجدت دوائره في الصفحة
+    setupThemeSwitcher(); // [الصفحات التي تحوي .theme-circle مثل home.html] تفعيل مبدل الثيم
+    
+    // تعطيل قائمة سريعة حسب الطلب
     
     // زر العودة للأعلى
-    setupScrollToTop();
+    setupScrollToTop(); // [جميع الصفحات] إظهار زر العودة للأعلى عند التمرير
     
     // مؤثرات ظهور عامة
-    setupRevealAnimations();
+    setupRevealAnimations(); // [home.html, teams.html, وغيرها] تفعيل مراقب ظهور العناصر
     
-    // إضافة مستمعي الأحداث للفلاتر
-    const applyFiltersBtn = document.getElementById('applyFilters');
-    const resetFiltersBtn = document.getElementById('resetFilters');
-    const applyTeamFiltersBtn = document.getElementById('applyTeamFilters');
-    const resetTeamFiltersBtn = document.getElementById('resetTeamFilters');
-
-    if (applyFiltersBtn) applyFiltersBtn.addEventListener('click', filterHalls);
-    if (resetFiltersBtn) resetFiltersBtn.addEventListener('click', resetFilters);
-    if (applyTeamFiltersBtn) applyTeamFiltersBtn.addEventListener('click', filterTeams);
-    if (resetTeamFiltersBtn) resetTeamFiltersBtn.addEventListener('click', resetTeamFilters);
+    // تمت إزالة وظائف الفلترة وروابطها لعدم الحاجة إليها
 
     // تحديث عرض قيمة شريط السعر في صفحة القاعات إن وُجد
-    const priceRange = document.getElementById('priceRange');
-    const currentPrice = document.getElementById('currentPrice');
-    if (priceRange && currentPrice) {
-        const updatePriceLabel = () => {
-            currentPrice.textContent = priceRange.value + ' ر.س';
+    const priceRange = document.getElementById('priceRange'); // [halls.html] عنصر شريط السعر (إن وجد)
+    const currentPrice = document.getElementById('currentPrice'); // [halls.html] عنصر عرض السعر الحالي
+    if (priceRange && currentPrice) { // [halls.html] تحقق من وجود العناصر
+        const updatePriceLabel = () => { // [halls.html] دالة تحديث النص المعروض
+            currentPrice.textContent = priceRange.value + ' ر.س'; // [halls.html] تحديث قيمة السعر المعروض
         };
-        updatePriceLabel();
-        priceRange.addEventListener('input', updatePriceLabel);
+        updatePriceLabel(); // [halls.html] تحديث أولي عند التحميل
+        priceRange.oninput = updatePriceLabel; // [halls.html] تحديث عند سحب المؤشر
     }
     
     // تفعيل أزرار عامة عبر الصفحات
     // 1) زر البحث في الصفحة الرئيسية
-    const searchBtn = document.querySelector('.search-btn');
-    if (searchBtn) {
-        searchBtn.addEventListener('click', () => {
-            try { sessionStorage.setItem('fromSearch', '1'); } catch (e) {}
-            location.href = 'halls.html';
-        });
+    const searchBtn = document.querySelector('.search-btn'); // [home.html] زر ابحث الآن في الهيرو
+    if (searchBtn) { // [home.html]
+        searchBtn.onclick = () => { // [home.html]
+            location.href = 'halls.html'; // [home.html] الانتقال إلى صفحة القاعات
+        };
     }
 
     // 2) زر الاشتراك في الفوتر
-    const subscribeBtn = document.querySelector('.subscribe-form .btn.btn-primary');
-    if (subscribeBtn) {
-        subscribeBtn.addEventListener('click', () => {
-            const emailInput = document.querySelector('.subscribe-form input[type="email"]');
-            const email = (emailInput && emailInput.value || '').trim();
-            const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-            if (!valid) {
-                alert('يرجى إدخال بريد إلكتروني صحيح');
-                return;
+    const subscribeBtn = document.querySelector('.subscribe-form .btn.btn-primary'); // [جميع الصفحات التي تحتوي فورم اشتراك]
+    if (subscribeBtn) { // [صفحات تحتوي فوتر باشتراك]
+        subscribeBtn.onclick = () => { // [صفحات تحتوي فوتر باشتراك]
+            const emailInput = document.querySelector('.subscribe-form input[type="email"]'); // [صفحات تحتوي فوتر باشتراك]
+            const email = (emailInput && emailInput.value || '').trim(); // [صفحات تحتوي فوتر باشتراك]
+            const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // [صفحات تحتوي فوتر باشتراك]
+            if (!valid) { // [صفحات تحتوي فوتر باشتراك]
+                alert('يرجى إدخال بريد إلكتروني صحيح'); // [صفحات تحتوي فوتر باشتراك]
+                return; // [صفحات تحتوي فوتر باشتراك]
             }
-            alert('تم الاشتراك بنجاح');
-            if (emailInput) emailInput.value = '';
-        });
+            alert('تم الاشتراك بنجاح'); // [صفحات تحتوي فوتر باشتراك]
+            if (emailInput) emailInput.value = ''; // [صفحات تحتوي فوتر باشتراك]
+        };
     }
 
     // 3) أزرار الفلترة في صفحة القاعات (تصميم الشريط الجانبي)
-    const hallsApplyBtn = document.querySelector('.apply-filters');
-    if (hallsApplyBtn) {
-        hallsApplyBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('تم تطبيق الفلترة (نموذج تجريبي)');
-        });
+    const hallsApplyBtn = document.querySelector('.apply-filters'); // [halls.html] زر تطبيق الفلاتر (تصميم تجريبي)
+    if (hallsApplyBtn) { // [halls.html]
+        hallsApplyBtn.onclick = (e) => { e.preventDefault(); return false; }; // [halls.html] تعطيل السلوك الافتراضي
     }
-    const hallsResetBtn = document.querySelector('.reset-filters');
-    if (hallsResetBtn) {
-        hallsResetBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('تمت إعادة التعيين (نموذج تجريبي)');
-        });
+    const hallsResetBtn = document.querySelector('.reset-filters'); // [halls.html] زر إعادة التعيين (تصميم تجريبي)
+    if (hallsResetBtn) { // [halls.html]
+        hallsResetBtn.onclick = (e) => { e.preventDefault(); return false; }; // [halls.html] تعطيل السلوك الافتراضي
     }
 
     // 4) ترقيم الصفحات في صفحة القاعات
-    const paginationButtons = document.querySelectorAll('.pagination button');
-    if (paginationButtons && paginationButtons.length) {
-        paginationButtons.forEach(btn => btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('التبديل بين الصفحات (نموذج تجريبي)');
-        }));
+    const paginationButtons = document.querySelectorAll('.pagination button'); // [halls.html] أزرار الترقيم (إن وجدت)
+    if (paginationButtons && paginationButtons.length) { // [halls.html]
+        paginationButtons.forEach(btn => btn.onclick = (e) => { // [halls.html]
+            e.preventDefault(); // [halls.html]
+            alert('التبديل بين الصفحات (نموذج تجريبي)'); // [halls.html]
+        });
     }
 
-    // 5) أزرار المصادقة في الهيدر عندما لا تحتوي على onclick
-    const headerAuth = document.querySelector('header .auth-buttons');
-    if (headerAuth) {
-        const loginBtn = headerAuth.querySelector('.btn.btn-outline');
-        const signupBtn = headerAuth.querySelector('.btn.btn-primary');
-        if (loginBtn && !loginBtn.getAttribute('onclick')) {
-            loginBtn.addEventListener('click', () => { location.href = 'index.html'; });
-        }
-        if (signupBtn && !signupBtn.getAttribute('onclick')) {
-            signupBtn.addEventListener('click', () => { location.href = 'signup.html'; });
-        }
+    // 5) استبدال أزرار المصادقة في الهيدر باسم المستخدم المسجل
+    const headerAuth = document.querySelector('header .auth-buttons'); // [جميع الصفحات]
+    if (headerAuth) { // [جميع الصفحات]
+        let uname = '';
+        try {
+            uname = localStorage.getItem('username') 
+                 || localStorage.getItem('userName') 
+                 || localStorage.getItem('loggedInUser') 
+                 || '';
+        } catch(e) {}
+        if (!uname) uname = 'المستخدم';
+        const initials = (uname.trim().split(/\s+/).map(s=>s[0]).join('').slice(0,2) || 'م').toUpperCase();
+        headerAuth.innerHTML = '';
+        const chip = document.createElement('div');
+        chip.className = 'user-chip';
+        chip.setAttribute('aria-label', 'حساب المستخدم');
+        chip.style.display = 'flex';
+        chip.style.alignItems = 'center';
+        chip.style.gap = '10px';
+        chip.style.padding = '8px 12px';
+        chip.style.borderRadius = '999px';
+        chip.style.background = 'var(--card-bg)';
+        chip.style.border = '1px solid var(--border-color)';
+        chip.style.boxShadow = 'var(--shadow)';
+        const avatar = document.createElement('div');
+        avatar.textContent = initials;
+        avatar.style.width = '32px';
+        avatar.style.height = '32px';
+        avatar.style.borderRadius = '50%';
+        avatar.style.display = 'flex';
+        avatar.style.alignItems = 'center';
+        avatar.style.justifyContent = 'center';
+        avatar.style.fontWeight = '700';
+        avatar.style.background = 'var(--gradient)';
+        avatar.style.color = '#fff';
+        const nameEl = document.createElement('span');
+        nameEl.textContent = uname;
+        nameEl.style.fontWeight = '600';
+        chip.appendChild(avatar);
+        chip.appendChild(nameEl);
+        headerAuth.appendChild(chip);
     }
 
     // 6) زر تغيير القاعة في صفحة الحجز
-    const clearSelectedHallBtn = document.getElementById('clearSelectedHall');
-    if (clearSelectedHallBtn) {
-        clearSelectedHallBtn.addEventListener('click', () => {
-            try { localStorage.removeItem('selectedHall'); } catch (e) {}
-            location.reload();
-        });
+    const clearSelectedHallBtn = document.getElementById('clearSelectedHall'); // [booking.html] زر مسح القاعة المختارة
+    if (clearSelectedHallBtn) { // [booking.html]
+        clearSelectedHallBtn.onclick = () => { // [booking.html]
+            try { localStorage.removeItem('selectedHall'); } catch (e) {} // [booking.html]
+            location.reload(); // [booking.html]
+        };
     }
     
     // إضافة تأثيرات للصور عند التمرير
-    setupImageAnimations();
-});
+    setupImageAnimations(); // [home.html والصفحات التي تحتوي .card-img img أو #gallery]
+};
 
 // دالة لإضافة تأثيرات للصور عند التمرير
-function setupImageAnimations() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+function setupImageAnimations() { // [home.html وأي صفحة تحوي صور بطاقات/معرض]
+    const observerOptions = { // [home.html]
+        threshold: 0.1, // [home.html] نسبة الظهور المطلوبة لتفعيل التأثير
+        rootMargin: '0px 0px -50px 0px' // [home.html] هامش يسهل تفعيل التأثير قبل الوصول الكامل
     };
     
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+    const observer = new IntersectionObserver(function(entries) { // [home.html]
+        entries.forEach(entry => { // [home.html]
+            if (entry.isIntersecting) { // [home.html]
+                entry.target.style.opacity = '1'; // [home.html] إظهار الصورة
+                entry.target.style.transform = 'translateY(0)'; // [home.html] إرجاعها لموضعها
             }
         });
-    }, observerOptions);
+    }, observerOptions); // [home.html]
     
     // تطبيق التأثير على جميع الصور (بطاقات + المعرض)
-    document.querySelectorAll('.card-img img, #gallery img').forEach(img => {
-        img.style.opacity = '0';
-        img.style.transform = 'translateY(20px)';
-        img.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        observer.observe(img);
+    document.querySelectorAll('.card-img img, #gallery img').forEach(img => { // [home.html وفرق/قاعات إذا وُجدت صور بطاقات]
+        img.style.opacity = '0'; // [home.html]
+        img.style.transform = 'translateY(20px)'; // [home.html]
+        img.style.transition = 'opacity 0.5s ease, transform 0.5s ease'; // [home.html]
+        observer.observe(img); // [home.html]
     });
 }

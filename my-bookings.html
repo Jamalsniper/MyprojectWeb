@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حجوزاتي - منصة حفلات</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .table { width:100%; border-collapse: collapse; }
+    .table th, .table td { padding:10px; border-bottom:1px solid var(--border-color,#e5e7eb); text-align: right; }
+    .table th { background:#f8fafc; color:#374151; font-weight:700; }
+    .empty { padding:20px; text-align:center; color:#6b7280; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="home.html" class="logo">
+          <i class="fas fa-glass-cheers"></i>
+          منصة حفلات
+        </a>
+        <nav>
+          <ul>
+            <li><a href="home.html">الرئيسية</a></li>
+            <li><a href="halls.html">القاعات</a></li>
+            <li><a href="teams.html">الفرق</a></li>
+            <li><a href="booking.html">نموذج الحجز</a></li>
+            <li><a href="my-bookings.html" class="active">حجوزاتي</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <button type="button" class="btn btn-outline" onclick="window.location.href='index.html'">تسجيل الدخول</button>
+          <button type="button" class="btn btn-primary" onclick="window.location.href='index.html?signup=1'">إنشاء حساب</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>حجوزاتي</h1>
+        <p>إدارة حجوزاتك السابقة والاطلاع على تفاصيلها.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2>قائمة الحجوزات</h2>
+        <p>يمكنك عرض التفاصيل أو إلغاء الحجز.</p>
+      </div>
+
+      <div id="box"></div>
+    </div>
+  </section>
+
+  <script>
+    (function(){
+      const box = document.getElementById('box');
+      function load(){
+        let items = [];
+        try{ items = JSON.parse(localStorage.getItem('bookings')||'[]'); }catch(e){ items = []; }
+        if(!items.length){ box.innerHTML = '<div class="empty">لا توجد حجوزات بعد</div>'; return; }
+        const rows = items.map(b=>{
+          const typeMap = {hall:'قاعة', team:'فرقة', both:'قاعة + فرقة'};
+          const hallName = b.hall && b.hall.name ? b.hall.name : '-';
+          const teamName = b.team && b.team.name ? b.team.name : '-';
+          return `<tr>
+            <td>${b.ref}</td>
+            <td>${b.date || '-'}</td>
+            <td>${typeMap[b.type]||b.type||'-'}</td>
+            <td>${hallName}</td>
+            <td>${teamName}</td>
+            <td style="white-space:nowrap">
+              <button class="btn btn-outline" onclick="location.href='confirmation.html?ref=${encodeURIComponent(b.ref)}'">عرض</button>
+              <button class="btn" onclick="(function(ref){ if(confirm('هل تريد إلغاء هذا الحجز؟')){ try{ const all=JSON.parse(localStorage.getItem('bookings')||'[]').filter(x=>x.ref!==ref); localStorage.setItem('bookings', JSON.stringify(all)); }catch(e){} location.reload(); } })('${b.ref}')">إلغاء</button>
+            </td>
+          </tr>`;
+        }).join('');
+        box.innerHTML = `<div class="content-card">
+          <div style="overflow:auto">
+            <table class="table">
+              <thead><tr>
+                <th>المرجع</th>
+                <th>التاريخ</th>
+                <th>النوع</th>
+                <th>القاعة</th>
+                <th>الفرقة</th>
+                <th>إجراءات</th>
+              </tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>`;
+      }
+      load();
+    })();
+  </script>
+</body>
+</html>

@@ -1,2 +1,3 @@
-/* الشروط والأحكام */
-.section-header { text-align: center; }
+.section-header { /* تنسيق عنصر رأس القسم في صفحة الشروط */
+  text-align: center; /* محاذاة النص إلى الوسط لتحسين القراءة */
+}

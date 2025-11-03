@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تأكيد الحجز - منصة حفلات</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: system-ui, Tahoma, Arial; }
+    .confirm-hero { background: var(--gradient, linear-gradient(135deg,#5b6cff,#7e9bff)); color:#fff; padding:40px 0; }
+    .confirm-card { background: var(--card-bg, #fff); border:1px solid var(--border-color,#e5e7eb); border-radius:12px; padding:20px; margin-top:-30px; box-shadow:0 8px 24px rgba(0,0,0,.08); }
+    .grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:12px; }
+    .label { color:#6b7280; font-size:14px; }
+    .value { font-weight:700; }
+    .actions { margin-top:16px; display:flex; gap:8px; flex-wrap:wrap; }
+    .badge { display:inline-block; padding:6px 10px; background:#eef2ff; color:#3730a3; border-radius:999px; font-weight:700; font-size:13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="home.html" class="logo">
+          <i class="fas fa-glass-cheers"></i>
+          منصة حفلات
+        </a>
+        <nav>
+          <ul>
+            <li><a href="home.html">الرئيسية</a></li>
+            <li><a href="halls.html">القاعات</a></li>
+            <li><a href="teams.html">الفرق</a></li>
+            <li><a href="booking.html">نموذج الحجز</a></li>
+            <li><a href="contact.html">اتصل بنا</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <button type="button" class="btn btn-outline" onclick="window.location.href='index.html'">تسجيل الدخول</button>
+          <button type="button" class="btn btn-primary" onclick="window.location.href='index.html?signup=1'">إنشاء حساب</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="confirm-hero">
+    <div class="container">
+      <h1>تم استلام طلبك</h1>
+      <p>شكراً لك! تم حفظ تفاصيل الحجز، وسنتواصل معك لتأكيده.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="confirm-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <h2 style="margin:0">تفاصيل الحجز</h2>
+          <span id="refBadge" class="badge"></span>
+        </div>
+        <div class="grid" style="margin-top:12px">
+          <div>
+            <div class="label">الاسم</div>
+            <div class="value" id="vName">-</div>
+          </div>
+          <div>
+            <div class="label">رقم الجوال</div>
+            <div class="value" id="vPhone">-</div>
+          </div>
+          <div>
+            <div class="label">تاريخ المناسبة</div>
+            <div class="value" id="vDate">-</div>
+          </div>
+          <div>
+            <div class="label">عدد الضيوف</div>
+            <div class="value" id="vGuests">-</div>
+          </div>
+          <div>
+            <div class="label">الميزانية</div>
+            <div class="value" id="vBudget">-</div>
+          </div>
+          <div>
+            <div class="label">نوع الحجز</div>
+            <div class="value" id="vType">-</div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px">
+          <div class="label">اختياراتك</div>
+          <div id="vSelections">-</div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" onclick="window.location.href='home.html'">الذهاب للرئيسية</button>
+          <button class="btn btn-outline" onclick="window.location.href='booking.html'">حجز جديد</button>
+          <button class="btn" onclick="(function(){ try{ localStorage.removeItem('selectedHall'); localStorage.removeItem('selectedTeam'); }catch(e){} alert('تم مسح التحديدات'); })()">مسح التحديدات</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function(){
+      function byId(id){ return document.getElementById(id); }
+      const params = new URLSearchParams(location.search);
+      const ref = params.get('ref') || sessionStorage.getItem('lastBookingRef') || '';
+      const badge = byId('refBadge');
+      if (ref) { badge.textContent = 'رقم الحجز: ' + ref; }
+      let booking = null;
+      try { booking = JSON.parse(sessionStorage.getItem('lastBooking')||'null'); } catch(e){}
+      if(!booking && ref){
+        try{
+          const all = JSON.parse(localStorage.getItem('bookings')||'[]');
+          booking = all.find(b => b.ref === ref) || null;
+        }catch(e){}
+      }
+      function setText(id, val){ var el=byId(id); if(el) el.textContent = val || '-'; }
+      if (booking){
+        setText('vName', booking.name);
+        setText('vPhone', booking.phone);
+        setText('vDate', booking.date);
+        setText('vGuests', String(booking.guests||''));
+        setText('vBudget', booking.budget ? (booking.budget + ' ر.س') : '-');
+        var typeMap = {hall:'قاعة', team:'فرقة', both:'قاعة + فرقة'};
+        setText('vType', typeMap[booking.type] || booking.type || '-');
+        var selections = [];
+        if(booking.hall){ selections.push('قاعة: ' + (booking.hall.name||'')); }
+        if(booking.team){ selections.push('فرقة: ' + (booking.team.name||'')); }
+        byId('vSelections').textContent = selections.length ? selections.join(' | ') : '-';
+      } else {
+        byId('vSelections').textContent = 'لا توجد بيانات حجز متاحة';
+      }
+    })();
+  </script>
+</body>
+</html>
